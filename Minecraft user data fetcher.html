@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <style>
+            h1 {
+                text-align: center ;
+                color: black;
+                font-family: sans-serif;
+            }
+            p2 {
+                text-align: center;
+            }
+            body{
+                text-align: center;
+            }
+            p {
+                size: 20px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>MINECRAFT ID, USERNAME HISTORY & SKIN FETCHER</h1>
+        <p><label for='username'>Username:</label></p>
+        <input type="text" id='username' name='username'><br>
+        <button onclick="bigchungles()">Click to submit</button>
+        <script>
+            function bigchungles() {
+                console.log('bigchungles has been activated')
+                var textbox_data = document.getElementById("username").value
+                var username_url = `https://playerdb.co/api/player/minecraft/${textbox_data}`
+                HttpGetAsync(username_url)
+            }
+            function HttpGetAsync(theUrl) {
+                console.log('HttpGetAsync has been activated')
+                var xmlhttp = new XMLHttpRequest
+                xmlhttp.onreadystatechange  = function(){
+                    if (xmlhttp.readyState == 4 ){
+                        if (xmlhttp.status === 200){
+                        var textbox_data = document.getElementById("username").value
+                        console.log('got response from thinga mabob')
+                        console.log(JSON.parse(xmlhttp.responseText))
+                        var xmlhttp_response_parsed = JSON.parse(xmlhttp.responseText)
+                        var raw_id = (xmlhttp_response_parsed['data']['player']['raw_id'])
+                        var avatar = (xmlhttp_response_parsed['data']['player']['avatar'])
+                        var previous_usernames = JSON.stringify(xmlhttp_response_parsed['data']['player']['meta']['name_history'])
+                        alert(`this is the user's id: ${raw_id}`)
+                        alert(`this is the user's name history: ${previous_usernames}`)
+                        alert(`this is a link to the user's minecraft skin: https://namemc.com/profile/${textbox_data}`)
+                        } else {
+                            alert('an error occured, The username may be invalid')
+                        }
+                    } 
+            }
+                xmlhttp.open('GET', theUrl, true)
+                xmlhttp.send(null)
+            }
+        </script>
+        <footer>
+           <p>Made possible thanks to <a href='https://playerdb.co'>playerdb.co</a></p>
+           <br>
+           &copy; 2021, Comrade_Wolfskii
+        </footer>
+    </body>
+</html>
